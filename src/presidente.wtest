@@ -1,0 +1,160 @@
+import presidentes.*
+
+describe "Tests de presidentes" {
+	const argentina = new Pais()
+	const macri = new Presidente()
+	const menem = new Presidente()
+	const kirchner = new Presidente()
+	const hirigoyen = new Presidente( estaVivo = false , fechaMuerte = 1918 )
+	
+	/* Obras */
+	const obraVial = new Obra( porcDeAlcance = 1.1 )
+	const obraHabitacional = new Obra( porcDeAlcance = 1.2 )
+	const obraSalud = new Obra( porcDeAlcance = 1.5 )
+	const obraExtraordinaria = new Obra( porcDeAlcance = 1.8 )
+	
+	/* Denunciantes */
+	//const lanata = new Denunciante( tipo = "periodista", seguidores = 0)
+	const carrio = new Politico( seguidores = 100000)
+	//const moyano = new Sindical ( seguidores = 0)
+	
+	/* Inauguraciones */
+	const inauguracionHospital = new InauguracionDeObra( cantidadDePersonasAfectadas = 10000, importancia = 3, tipoDeObra =  obraSalud )
+	const inauguracionGralPaz = new InauguracionDeObra( cantidadDePersonasAfectadas = 50000, importancia = 3, tipoDeObra =  obraVial )
+	const inauguracionBarrioPrivado = new InauguracionDeObra( cantidadDePersonasAfectadas = 1000, importancia = 2, tipoDeObra =  obraHabitacional )
+	const inauguracionBarrioHumilde = new InauguracionDeObra( cantidadDePersonasAfectadas = 5000, importancia = 3, tipoDeObra =  obraHabitacional )
+	const inauguracionPlantaEolica = new InauguracionDeObra( cantidadDePersonasAfectadas = 100000, importancia = 2, tipoDeObra =  obraExtraordinaria )
+	
+	/* Discursos */
+	const asumeMacri = new Discurso( cantidadDePersonasAfectadas = 50000, importancia = 3, aplausoIntensidad = 3 )
+	const asumeMenem = new Discurso( cantidadDePersonasAfectadas = 45000, importancia = 3, aplausoIntensidad = 3 )
+	const asumeMenem2 = new Discurso( cantidadDePersonasAfectadas = 10000, importancia = 2, aplausoIntensidad = 1 )
+	const asumeKirchner = new Discurso( cantidadDePersonasAfectadas = 30000, importancia = 3, aplausoIntensidad = 2 )
+	const museoKirchner = new Discurso ( cantidadDePersonasAfectadas = 2000, importancia = 1, aplausoIntensidad = 2)
+	const asumeHirigoyen = new Discurso( cantidadDePersonasAfectadas = 10000, importancia = 3, aplausoIntensidad = 3 )
+	
+	/* Promesas */
+	const pobresaCeroMacri = new Promesa ( cantidadDePersonasAfectadas = 20000, importancia = 3, aplausoIntensidad = 3, estaCumplida = false )
+	const estratosferaMenem = new Promesa ( cantidadDePersonasAfectadas = 2000, importancia = 1, aplausoIntensidad = 1, estaCumplida = false )
+	const pagarDeudaFMI = new Promesa ( cantidadDePersonasAfectadas = 25000, importancia = 3, aplausoIntensidad = 3, estaCumplida = true )
+	const noEndeudarPais = new Promesa ( cantidadDePersonasAfectadas = 50000, importancia = 1, aplausoIntensidad = 1, estaCumplida = false )
+	
+	/* Denuncias */
+	const denunciaLanata = new DenunciaPorTv ( cantidadDePersonasAfectadas = 50, importancia = 3, denunciante = periodista)
+	const denunciaCarrio = new DenunciaPorTv ( cantidadDePersonasAfectadas = 20, importancia = 3, denunciante = carrio)
+	//const denunciaMoyano = new DenunciaPorTv ( cantidadDePersonasAfectadas = 20, importancia = 3, denunciante = moyano)
+	
+	
+	/* Metodos */
+	method agregarPresidentesAPais() {
+		argentina.agregarPresidente(macri)
+		argentina.agregarPresidente(kirchner)
+		argentina.agregarPresidente(menem)
+		argentina.agregarPresidente(hirigoyen)
+	}
+	
+	method agregarInauguracionesAPresidentes() {
+		macri.agregarActo(inauguracionGralPaz)
+		macri.agregarActo(inauguracionHospital)
+		kirchner.agregarActo(inauguracionPlantaEolica)
+		menem.agregarActo(inauguracionBarrioPrivado)
+		hirigoyen.agregarActo(inauguracionBarrioHumilde)
+	}
+	
+	method agregarDiscursosAPresidentes() {
+		macri.agregarActo(asumeMacri)
+		
+		menem.agregarActo(asumeMenem)
+		menem.agregarActo(asumeMenem2)
+		
+		kirchner.agregarActo(asumeKirchner)
+		kirchner.agregarActo(museoKirchner)
+		
+		hirigoyen.agregarActo(asumeHirigoyen)		
+	}
+	
+	method agregarPromesasAPresidentes() {
+		macri.agregarActo(pobresaCeroMacri)
+		macri.agregarActo(noEndeudarPais)
+		menem.agregarActo(estratosferaMenem)
+		kirchner.agregarActo(pagarDeudaFMI)
+	}
+	
+	method agregarDenunciasAPresidentes() {
+		kirchner.agregarActo(denunciaLanata)
+		kirchner.agregarActo(denunciaCarrio)
+		macri.agregarActo(denunciaCarrio)
+	}
+	
+	test "Impacto de inauguraciones" {
+		assert.equals(165000, inauguracionGralPaz.impacto())
+		assert.equals(45000, inauguracionHospital.impacto())
+		assert.equals(2400, inauguracionBarrioPrivado.impacto())
+		assert.equals(18000, inauguracionBarrioHumilde.impacto())
+		assert.equals(360000, inauguracionPlantaEolica.impacto())
+	}
+	
+	test "Impacto de discursos" {
+		assert.equals(90000,asumeHirigoyen.impacto())
+		assert.equals(450000,asumeMacri.impacto())
+		assert.equals(180000,asumeKirchner.impacto())
+		assert.equals(405000,asumeMenem.impacto())
+		assert.equals(20000,asumeMenem2.impacto())
+		assert.equals(4000,museoKirchner.impacto())
+	}
+	
+	test "Impacto de promesas" {
+		assert.equals(-180000,pobresaCeroMacri.impacto())
+		pobresaCeroMacri.estaCumplida(true)
+		assert.equals(360000,pobresaCeroMacri.impacto())
+		assert.equals(-2000,estratosferaMenem.impacto())
+		assert.equals(450000,pagarDeudaFMI.impacto())
+		assert.equals(-50000,noEndeudarPais.impacto())
+	}
+	
+	test "Impacto de denuncias" {
+		assert.equals(-3750,denunciaLanata.impacto())
+		assert.equals(-1200,denunciaCarrio.impacto())
+	}
+	
+	test "Impacto por presidentes " {
+		self.agregarPresidentesAPais()
+		self.agregarInauguracionesAPresidentes()
+		self.agregarDiscursosAPresidentes()
+		self.agregarPromesasAPresidentes()
+		self.agregarDenunciasAPresidentes()
+		assert.equals( 428800,macri.impactoTotal() )
+		assert.equals(0, macri.quePromesasTiene() )
+		macri.cumplirPromesas()
+		assert.equals( 888800,macri.impactoTotal() )
+		assert.equals( 893765,kirchner.impactoTotal() )
+		assert.equals( 423400,menem.impactoTotal() )
+		assert.equals( 1188000,hirigoyen.impactoTotal() )
+		
+		assert.equals(hirigoyen,argentina.mejorPresidente())
+	}
+	
+	test "Presidentes con actos mayores a cuatro" {
+		self.agregarInauguracionesAPresidentes()
+		self.agregarDiscursosAPresidentes()
+		self.agregarPromesasAPresidentes()
+		self.agregarDenunciasAPresidentes()
+		assert.notThat(hirigoyen.masDeCuatroAcciones())
+		argentina.agregarPresidente(hirigoyen)
+		assert.notThat(argentina.accionesMayorACuatro())
+		argentina.agregarPresidente(macri)
+		assert.that(argentina.accionesMayorACuatro())
+	}
+	
+	test "Macri cumple todas sus promesas" {
+		self.agregarInauguracionesAPresidentes()
+		self.agregarDiscursosAPresidentes()
+		self.agregarPromesasAPresidentes()
+		self.agregarDenunciasAPresidentes()
+		assert.equals(428800,macri.impactoTotal() )
+		macri.cumplirPromesas()
+		assert.equals(888800,macri.impactoTotal() )
+		//assert.that( macri.promesasCumplidas() )
+	}
+	
+}
